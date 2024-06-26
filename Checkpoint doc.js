@@ -1,50 +1,53 @@
-var plusButton=document.getElementsByClassName("plus")
-console.log(plusButton)
-for( let i=0; i<plusButton.length;i++){
-plusButton[i].addEventListener("click",function(){
- plusButton[i].nextElementSibling.innerHTML ++;
- totalPrice(); 
-})
+// Add event listeners to plus buttons
+var plusButtons = document.getElementsByClassName("plus");
+for (let i = 0; i < plusButtons.length; i++) {
+    plusButtons[i].addEventListener("click", function() {
+        let quantityElement = plusButtons[i].nextElementSibling;
+        quantityElement.innerHTML = parseInt(quantityElement.innerHTML) + 1;
+        totalPrice();
+    });
 }
 
-
-var minusButton=document.getElementsByClassName("minus")
-for(let i=0;i<minusButton.length;i++){
-   minusButton[i].addEventListener("click",function(){
-     if(minusButton[i].previousElementSibling.innerHTML >0){
-    minusButton[i].previousElementSibling.innerHTML --
-     }
-     totalPrice();
-  })
+// Add event listeners to minus buttons
+var minusButtons = document.getElementsByClassName("minus");
+for (let i = 0; i < minusButtons.length; i++) {
+    minusButtons[i].addEventListener("click", function() {
+        let quantityElement = minusButtons[i].previousElementSibling;
+        if (parseInt(quantityElement.innerHTML) > 0) {
+            quantityElement.innerHTML = parseInt(quantityElement.innerHTML) - 1;
+        }
+        totalPrice();
+    });
 }
 
-var trash=Array.from(document.getElementsByClassName("trash"))
-console.log(trash)
-for(let i=0;i<trash.length;i++){
-  trash[i].addEventListener("click",function(){
-    trash[i].parentNode.remove();
-    totalPrice();
-  })
+// Add event listeners to trash buttons
+var trashButtons = document.getElementsByClassName("trash");
+for (let i = 0; i < trashButtons.length; i++) {
+    trashButtons[i].addEventListener("click", function() {
+        trashButtons[i].parentNode.remove();
+        totalPrice();
+    });
 }
 
-let hearts = document.getElementsByClassName("heart");
-for (let i = 0; i < hearts.length; i++) {
-  hearts[i].addEventListener("click", function() {
-    // Inside event listener function, `this` refers to the element clicked
-    this.style.color = "red";
-    totalPrice();
-  });
+// Add event listeners to heart buttons
+var heartButtons = document.getElementsByClassName("heart");
+for (let i = 0; i < heartButtons.length; i++) {
+    heartButtons[i].addEventListener("click", function() {
+        this.style.color = "red";
+    });
 }
 
+// Calculate total price
 function totalPrice() {
-  // Get the product price
-  let productPrice = document.getElementsByClassName('prx');
-  // Get the product quantity
-  let productQuantity = document.getElementsByClassName('quantity');
-  // Initilize the sum
-  let sum = 0;
-  for (let i = 0; i < productPrice.length; i++) {
-    sum += productPrice[i].innerText * productQuantity[i].innerText;
-  }
-  document.getElementById('prix-total').innerText = sum;
+    let productPrices = document.getElementsByClassName('prx');
+    let productQuantities = document.querySelectorAll('.plus ~ p, .minus ~ p'); // Select quantity p tags
+    let sum = 0;
+
+    for (let i = 0; i < productPrices.length; i++) {
+        let price = parseFloat(productPrices[i].innerText.replace('$', ''));
+        let quantity = parseInt(productQuantities[i].innerText);
+        sum += price * quantity;
+    }
+
+    document.getElementById('prix-total').innerText = sum;
 }
